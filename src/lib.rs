@@ -29,9 +29,14 @@ pub struct IkConstraint {
     pub enabled: bool,
 }
 
+/// System set used for calculating and updating inverse kinematics.
+/// Use for scheduling your systems before/after the IK Solver runs if necessary.
+#[derive(SystemSet, Debug, Clone, PartialEq, Eq, Hash)]
+pub struct IKSolverSystemSet;
+
 impl Plugin for InverseKinematicsPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Update, solver::inverse_kinematics_system)
+        app.add_systems(Update, solver::inverse_kinematics_system.in_set(IKSolverSystemSet))
             .register_type::<IkConstraint>();
     }
 }
